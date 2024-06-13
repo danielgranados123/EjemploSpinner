@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="EstiloSpinner"
+        parent="Widget.AppCompat.Spinner">
+
+        <item name="android:fontFamily">
+            @font/poppins_medium
+        </item>
+    </style>
+
+</resources>

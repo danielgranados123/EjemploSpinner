@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.activity)
     testImplementation(libs.junit)
     implementation("com.oracle.database.jdbc:ojdbc6:11.2.0.4")
     androidTestImplementation(libs.androidx.junit)

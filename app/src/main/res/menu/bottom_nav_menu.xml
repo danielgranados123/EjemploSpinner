@@ -4,10 +4,14 @@
     <item
         android:id="@+id/doctores"
         android:icon="@drawable/ic_doctor"
+
+        android:iconTint="#003C70"
+
         android:title="Doctores" />
 
     <item
         android:id="@+id/pacientes"
         android:icon="@drawable/ic_paciente"
+
         android:title="Pacientes" />
 </menu>
