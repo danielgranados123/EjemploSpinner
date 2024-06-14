@@ -8,14 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import modelo.ClaseConexion
 import modelo.dataClassDoctores
+import java.util.UUID
 
 class pacientes : Fragment() {
 
@@ -35,6 +38,9 @@ class pacientes : Fragment() {
         //1-Mandar a llamar a los elementos
         val spDoctores= root.findViewById<Spinner>(R.id.spDoctores)
         val txtFechaNacimientoPaciente = root.findViewById<EditText>(R.id.txtFechaNacimiento)
+        val txtNombrePaciente = root.findViewById<EditText>(R.id.txtNombrePaciente)
+        val txtDireccion = root.findViewById<EditText>(R.id.txtDireccionPaciente)
+        val btnGuardarPaciente = root.findViewById<Button>(R.id.btnGuardarPaciente)
 
         //Funcion para hacer el select de los nombres de los doctores que voy a mostrar en el Spinner
 
@@ -92,6 +98,31 @@ class pacientes : Fragment() {
                 anio, mes, dia
             )
             datePickerDialog.show()
+        }
+
+        btnGuardarPaciente.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val objConexion = ClaseConexion().cadenaConexion()
+
+                val doctor = obtenerDoctores()
+
+
+                val addPaciente = objConexion?.prepareStatement("insert into tbPacientes (pacienteUUID, doctorUUID, nombre, fechaNacimiento, direccion) values (?, ?, ?, ?, ?")!!
+
+                addPaciente.setString(1, UUID.randomUUID().toString())
+                addPaciente.setString(2, doctor[spDoctores.selectedItemPosition].DoctorUUID)
+                addPaciente.setString(3, txtNombrePaciente.text.toString())
+                addPaciente.setString(4, txtFechaNacimientoPaciente.text.toString())
+                addPaciente.setString(5, txtDireccion.text.toString())
+                addPaciente.executeUpdate()
+
+                withContext(Dispatchers.Main){
+                    txtNombrePaciente.setText("")
+                    txtDireccion.setText("")
+                    txtFechaNacimientoPaciente.setText("")
+                    Toast.makeText(requireContext(), "Paciente agregado con éxito", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
         return root
     }
