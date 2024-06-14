@@ -36,28 +36,35 @@ class doctores : Fragment() {
         //////////////TODO: guardar datos de doctores//////////////////
         //2- Programar el boton
         btnGuardarDoctor.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                //Guardar datos
-                //1- Creo un objeto de la clase conexion
-                val claseC = ClaseConexion().cadenaConexion()
 
-                //2- creo una variable que contenga un PrepareStatement
-                val addProducto =
-                    claseC?.prepareStatement("insert into tbDoctores(DoctorUUID, nombreDoctor, Especialidad, Telefono) values(?, ?, ?, ?)")!!
-                addProducto.setString(1, UUID.randomUUID().toString())
-                addProducto.setString(2, txtNombreDoctor.text.toString())
-                addProducto.setString(3, txtEspecialidadDoctor.text.toString())
-                addProducto.setString(4, txtTelefonoDoctor.text.toString())
-                addProducto.executeUpdate()
+            if (txtNombreDoctor.text.isEmpty() || txtEspecialidadDoctor.text.isEmpty() || txtTelefonoDoctor.text.isEmpty()) {
+            Toast.makeText(requireContext(), "Campos vacíos", Toast.LENGTH_SHORT).show()
+        }
+        else{
+                CoroutineScope(Dispatchers.IO).launch {
+                    //Guardar datos
+                    //1- Creo un objeto de la clase conexion
+                    val claseC = ClaseConexion().cadenaConexion()
 
-                //Abro una corrutina para mostrar una alerta y limpiar los campos
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Datos guardados", Toast.LENGTH_SHORT).show()
-                    txtNombreDoctor.setText("")
-                    txtEspecialidadDoctor.setText("")
-                    txtTelefonoDoctor.setText("")
+                    //2- creo una variable que contenga un PrepareStatement
+                    val addProducto =
+                        claseC?.prepareStatement("insert into tbDoctores(DoctorUUID, nombreDoctor, Especialidad, Telefono) values(?, ?, ?, ?)")!!
+                    addProducto.setString(1, UUID.randomUUID().toString())
+                    addProducto.setString(2, txtNombreDoctor.text.toString())
+                    addProducto.setString(3, txtEspecialidadDoctor.text.toString())
+                    addProducto.setString(4, txtTelefonoDoctor.text.toString())
+                    addProducto.executeUpdate()
+
+                    //Abro una corrutina para mostrar una alerta y limpiar los campos
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Datos guardados", Toast.LENGTH_SHORT).show()
+                        txtNombreDoctor.setText("")
+                        txtEspecialidadDoctor.setText("")
+                        txtTelefonoDoctor.setText("")
+                    }
                 }
-            }
+        }
+
         }
 
         return root
