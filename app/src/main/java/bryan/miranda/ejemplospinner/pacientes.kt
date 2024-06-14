@@ -1,11 +1,14 @@
 package bryan.miranda.ejemplospinner
 
+import android.app.DatePickerDialog
+import android.icu.util.Calendar
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Spinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +34,7 @@ class pacientes : Fragment() {
 
         //1-Mandar a llamar a los elementos
         val spDoctores= root.findViewById<Spinner>(R.id.spDoctores)
+        val txtFechaNacimientoPaciente = root.findViewById<EditText>(R.id.txtFechaNacimiento)
 
         //Funcion para hacer el select de los nombres de los doctores que voy a mostrar en el Spinner
 
@@ -71,6 +75,23 @@ class pacientes : Fragment() {
 
             spDoctores.adapter = miAdaptador
         }
+        }
+
+        txtFechaNacimientoPaciente.setOnClickListener {
+            val calendario = Calendar.getInstance()
+            val anio = calendario.get(Calendar.YEAR)
+            val mes = calendario.get(Calendar.MONTH)
+            val dia = calendario.get(Calendar.DAY_OF_MONTH)
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                { view, anioSeleccionado, mesSeleccionado, diaSeleccionado ->
+                    val fechaSeleccionada =
+                        "$diaSeleccionado/${mesSeleccionado + 1}/$anioSeleccionado"
+                    txtFechaNacimientoPaciente.setText(fechaSeleccionada)
+                },
+                anio, mes, dia
+            )
+            datePickerDialog.show()
         }
         return root
     }
