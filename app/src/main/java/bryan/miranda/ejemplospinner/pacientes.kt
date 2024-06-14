@@ -101,26 +101,31 @@ class pacientes : Fragment() {
         }
 
         btnGuardarPaciente.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val objConexion = ClaseConexion().cadenaConexion()
+            if (txtNombrePaciente.text.isEmpty() || txtDireccion.text.isEmpty() || txtFechaNacimientoPaciente.text.isEmpty()) {
+                Toast.makeText(requireContext(), "Campos vacíos", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                CoroutineScope(Dispatchers.IO).launch {
+                    val objConexion = ClaseConexion().cadenaConexion()
 
-                val doctor = obtenerDoctores()
+                    val doctor = obtenerDoctores()
 
 
-                val addPaciente = objConexion?.prepareStatement("insert into tbPacientes (pacienteUUID, doctorUUID, nombre, fechaNacimiento, direccion) values (?, ?, ?, ?, ?")!!
+                    val addPaciente = objConexion?.prepareStatement("insert into tbPacientes (pacienteUUID, doctorUUID, nombre, fechaNacimiento, direccion) values (?, ?, ?, ?, ?")!!
 
-                addPaciente.setString(1, UUID.randomUUID().toString())
-                addPaciente.setString(2, doctor[spDoctores.selectedItemPosition].DoctorUUID)
-                addPaciente.setString(3, txtNombrePaciente.text.toString())
-                addPaciente.setString(4, txtFechaNacimientoPaciente.text.toString())
-                addPaciente.setString(5, txtDireccion.text.toString())
-                addPaciente.executeUpdate()
+                    addPaciente.setString(1, UUID.randomUUID().toString())
+                    addPaciente.setString(2, doctor[spDoctores.selectedItemPosition].DoctorUUID)
+                    addPaciente.setString(3, txtNombrePaciente.text.toString())
+                    addPaciente.setString(4, txtFechaNacimientoPaciente.text.toString())
+                    addPaciente.setString(5, txtDireccion.text.toString())
+                    addPaciente.executeUpdate()
 
-                withContext(Dispatchers.Main){
-                    txtNombrePaciente.setText("")
-                    txtDireccion.setText("")
-                    txtFechaNacimientoPaciente.setText("")
-                    Toast.makeText(requireContext(), "Paciente agregado con éxito", Toast.LENGTH_SHORT).show()
+                    withContext(Dispatchers.Main){
+                        txtNombrePaciente.setText("")
+                        txtDireccion.setText("")
+                        txtFechaNacimientoPaciente.setText("")
+                        Toast.makeText(requireContext(), "Paciente agregado con éxito", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
